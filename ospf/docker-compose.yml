@@ -1,0 +1,197 @@
+version: '2.1'
+
+services:
+  r1:
+    build: .
+    volumes:
+      - ./volumes/quagga/r1/zebra.conf:/etc/quagga/zebra.conf:ro
+      - ./volumes/quagga/r1/ospfd.conf:/etc/quagga/ospfd.conf:ro
+      - ./volumes/supervisord.conf:/etc/supervisord.conf:ro
+    image: ospf:20190321
+    privileged: true
+    ports:
+      #admin
+      - 10011:2601
+      #ospf
+      - 10012:2604
+
+    networks:
+      nr12:
+        ipv4_address: 172.32.2.2
+      nr13:
+        ipv4_address: 172.32.3.2
+          
+  r2:
+    build: .
+    volumes:
+      - ./volumes/quagga/r2/zebra.conf:/etc/quagga/zebra.conf:ro
+      - ./volumes/quagga/r2/ospfd.conf:/etc/quagga/ospfd.conf:ro
+      - ./volumes/supervisord.conf:/etc/supervisord.conf:ro
+    image: ospf:20190321
+    privileged: true
+    ports:
+      #admin
+      - 10021:2601
+      #ospf
+      - 10022:2604
+    networks:
+      nr12:
+        ipv4_address: 172.32.2.3
+      nr23:
+        ipv4_address: 172.32.4.2
+      nh123:
+        ipv4_address: 172.32.1.2
+
+  r3:
+    build: .
+    volumes:
+      - ./volumes/quagga/r3/zebra.conf:/etc/quagga/zebra.conf:ro
+      - ./volumes/quagga/r3/ospfd.conf:/etc/quagga/ospfd.conf:ro
+      - ./volumes/supervisord.conf:/etc/supervisord.conf:ro
+    image: ospf:20190321
+    privileged: true
+    ports:
+      #admin
+      - 10031:2601
+      #ospf
+      - 10032:2604
+    networks:
+      nr13:
+        ipv4_address: 172.32.3.3
+      nr23:
+        ipv4_address: 172.32.4.3
+      nr34:
+        ipv4_address: 172.32.5.2
+      nr35:
+        ipv4_address: 172.32.6.2
+  r4:
+    build: .
+    volumes:
+      - ./volumes/quagga/r4/zebra.conf:/etc/quagga/zebra.conf:ro
+      - ./volumes/quagga/r4/ospfd.conf:/etc/quagga/ospfd.conf:ro
+      - ./volumes/supervisord.conf:/etc/supervisord.conf:ro
+    image: ospf:20190321
+    privileged: true
+    ports:
+      #admin
+      - 10041:2601
+      #ospf
+      - 10042:2604
+    networks:
+      nr34:
+        ipv4_address: 172.32.5.3
+      nr45:
+        ipv4_address: 172.32.7.2
+      nr4h4:
+        ipv4_address: 172.32.8.2
+  r5:
+    build: .
+    volumes:
+      - ./volumes/quagga/r5/zebra.conf:/etc/quagga/zebra.conf:ro
+      - ./volumes/quagga/r5/ospfd.conf:/etc/quagga/ospfd.conf:ro
+      - ./volumes/supervisord.conf:/etc/supervisord.conf:ro
+    image: ospf:20190321
+    privileged: true
+    ports:
+      #admin
+      - 10051:2601
+      #ospf
+      - 10052:2604
+    networks:
+      nr35:
+        ipv4_address: 172.32.6.3
+      nr45:
+        ipv4_address: 172.32.7.3
+      nr5h5:
+        ipv4_address: 172.32.9.2
+  h1:
+    image: alpine
+    privileged: true
+    command: top
+    networks:
+      nh123:
+        ipv4_address: 172.32.1.11
+  h2:
+    image: alpine
+    privileged: true
+    command: top
+    networks:
+      nh123:
+        ipv4_address: 172.32.1.12
+  h3:
+    image: alpine
+    privileged: true
+    command: top
+    networks:
+      nh123:
+        ipv4_address: 172.32.1.13
+  h4:
+    image: alpine
+    privileged: true
+    command: top
+    networks:
+      nr4h4:
+        ipv4_address: 172.32.8.11
+  h5:
+    image: alpine
+    privileged: true
+    command: top
+    networks:
+      nr5h5:
+        ipv4_address: 172.32.9.11
+
+networks:
+  nh123:
+    driver: "bridge"
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.32.1.0/24
+  nr12:
+    driver: "bridge"
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.32.2.0/24
+  nr13:
+    driver: "bridge"
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.32.3.0/24
+  nr23:
+    driver: "bridge"
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.32.4.0/24
+  nr34:
+    driver: "bridge"
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.32.5.0/24
+  nr35:
+    driver: "bridge"
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.32.6.0/24
+  nr45:
+    driver: "bridge"
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.32.7.0/24
+  nr4h4:
+    driver: "bridge"
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.32.8.0/24
+  nr5h5:
+    driver: "bridge"
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.32.9.0/24
