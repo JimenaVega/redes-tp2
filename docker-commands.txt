@@ -1,0 +1,45 @@
+#ver la red
+docker network ls
+
+#ver elementos de la red (Red id se obtiene con el comando anterior)
+docker network inspect <red id>
+
+#ver todos los containers
+docker container ls -a
+
+#ver connedores levantados
+docker-compose ps
+
+#stop all containers
+docker container stop $(docker container ls –aq)
+
+#remove all containers
+docker container rm $(docker container ls –aq)
+
+#remove all networks unused
+docker network prune
+
+#Para ingresar dentro de router
+telnet localhost 10011
+
+#para ingresar dentro de hosts
+docker ps
+docker exec -ti <docker-id> ash
+
+#añadir default gateway en host
+ip r
+ip r del def
+ip r add 0.0.0.0/0 via 172.16.10.2
+
+#ver el nombre de interfaz para capturar en wireshark
+
+docker exec -it my-container cat /sys/class/net/eth1/iflink
+#123
+
+#And then:
+
+ip ad | grep 123
+#123: vethd3234u4@if122: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue ma
+
+
+
