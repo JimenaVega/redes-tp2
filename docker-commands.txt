@@ -11,10 +11,10 @@ docker container ls -a
 docker-compose ps
 
 #stop all containers
-docker container stop $(docker container ls –aq)
+docker container stop $(docker container ls -aq)
 
 #remove all containers
-docker container rm $(docker container ls –aq)
+docker container rm $(docker container ls -aq)
 
 #remove all networks unused
 docker network prune
@@ -41,5 +41,7 @@ docker exec -it my-container cat /sys/class/net/eth1/iflink
 ip ad | grep 123
 #123: vethd3234u4@if122: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue ma
 
+#Para ver la interfaz con wireshark en la bash ejecutar
 
+wireshark -i vethd3234u4 -k
 
